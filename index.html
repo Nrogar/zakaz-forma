@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>АЛИОЛХИМ — Форма заявки</title>
+<style>
+  :root {
+    --black: #1a1a1a;
+    --white: #ffffff;
+    --accent: #0077cc;
+    --accent-light: #e8f4fd;
+    --gray-100: #f5f5f5;
+    --gray-200: #e8e8e8;
+    --gray-400: #999;
+    --gray-600: #555;
+    --success: #2e7d32;
+    --border: #ddd;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: var(--font);
+    background: var(--gray-100);
+    color: var(--black);
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .header {
+    background: var(--black);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  }
+
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+  }
+
+  .logo-block { display: flex; flex-direction: column; line-height: 1; }
+
+  .logo-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    background: var(--white);
+    color: var(--black);
+    padding: 4px 10px;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+
+  .logo-tagline {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    margin-top: 4px;
+    padding-left: 2px;
+  }
+
+  .header-title { text-align: right; }
+
+  .header-title h1 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .header-title p { font-size: 10px; color: var(--gray-400); margin-top: 2px; }
+
+  .main { max-width: 960px; margin: 0 auto; padding: 20px 12px 80px; }
+
+  .section-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-direction: column; }
+
+  .tab-btn {
+    flex: 1;
+    padding: 14px 8px;
+    border: 2px solid var(--black);
+    background: transparent;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--black);
+    -webkit-appearance: none;
+    text-align: center;
+    min-height: 48px;
+  }
+
+  .tab-btn.active { background: var(--black); color: var(--white); }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  .product-grid { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
+
+  .product-row {
+    background: var(--white);
+    border-left: 3px solid transparent;
+    padding: 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .product-row.has-value {
+    border-left-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .product-name { font-size: 14px; font-weight: 700; color: var(--black); }
+  .product-desc { font-size: 11px; color: var(--gray-600); line-height: 1.4; margin-top: 2px; }
+
+  .product-controls { display: flex; align-items: center; gap: 8px; }
+
+  .volume-select {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 28px 0 10px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--black);
+    cursor: pointer;
+    outline: none;
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    border-radius: 0;
+    height: 46px;
+  }
+
+  .volume-select:focus { border-color: var(--accent); }
+
+  .qty-control {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    flex-shrink: 0;
+    height: 46px;
+  }
+
+  .qty-btn {
+    width: 46px;
+    height: 46px;
+    border: none;
+    background: var(--gray-100);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--black);
+    font-weight: 300;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+  }
+
+  .qty-btn:active { background: var(--gray-200); }
+
+  .qty-input {
+    width: 52px;
+    height: 46px;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 700;
+    background: var(--white);
+    color: var(--black);
+    -moz-appearance: textfield;
+  }
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .extra-fields {
+    background: var(--white);
+    padding: 16px 12px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .field-group label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 6px;
+  }
+
+  .field-group input,
+  .field-group textarea {
+    width: 100%;
+    font-family: var(--font);
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    outline: none;
+    color: var(--black);
+    background: var(--white);
+    resize: vertical;
+    border-radius: 0;
+    -webkit-appearance: none;
+    min-height: 46px;
+  }
+
+  .field-group input:focus,
+  .field-group textarea:focus { border-color: var(--accent); }
+
+  .basket-preview {
+    background: var(--black);
+    color: var(--white);
+    padding: 16px 12px;
+    margin-bottom: 16px;
+  }
+
+  .basket-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 10px;
+  }
+
+  .basket-empty { font-size: 12px; color: var(--gray-400); font-style: italic; }
+  .basket-items { display: flex; flex-direction: column; gap: 2px; }
+
+  .basket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid #2a2a2a;
+    gap: 8px;
+  }
+
+  .basket-item:last-child { border-bottom: none; }
+  .basket-item-name { font-weight: 700; color: var(--white); }
+  .basket-item-detail { color: var(--gray-400); font-size: 11px; }
+  .basket-item-qty { font-weight: 700; color: var(--accent); font-size: 13px; white-space: nowrap; flex-shrink: 0; }
+
+  /* Кнопки — на мобильном: копирование главное */
+  .send-area { display: flex; flex-direction: column; gap: 8px; }
+
+  .send-row-main { display: flex; gap: 8px; }
+
+  .btn-send {
+    padding: 0 20px;
+    border: none;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-appearance: none;
+    border-radius: 0;
+    touch-action: manipulation;
+    height: 54px;
+    text-align: center;
+  }
+
+  .btn-copy { flex: 1; background: var(--black); color: var(--white); }
+  .btn-copy:active { background: #333; }
+
+  .btn-email { flex: 1; background: var(--white); color: var(--black); border: 2px solid var(--black); }
+  .btn-email:active { background: var(--gray-100); }
+
+  .btn-reset {
+    background: transparent;
+    color: var(--gray-400);
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    padding: 0 16px;
+    font-size: 20px;
+    height: 54px;
+  }
+
+  .btn-reset:active { background: var(--gray-100); color: var(--black); }
+
+  .count-badge {
+    display: none;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  .count-badge.visible { display: inline-block; }
+
+  .notice {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 10px;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--success);
+    color: var(--white);
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font);
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .contacts-bar {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--gray-600);
+    line-height: 2;
+    margin-top: 32px;
+  }
+
+  .contacts-bar a { color: var(--accent); text-decoration: none; }
+
+  /* ДЕСКТОП */
+  @media (min-width: 640px) {
+    .main { padding: 28px 24px 60px; }
+    .section-tabs { flex-direction: row; }
+    .tab-btn { flex: none; padding: 10px 28px; min-height: auto; }
+
+    .product-row { flex-direction: row; align-items: center; gap: 16px; }
+    .product-info { flex: 1; min-width: 0; }
+    .product-desc { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-controls { flex-shrink: 0; }
+    .volume-select { flex: none; min-width: 100px; height: 42px; }
+    .qty-control { height: 42px; }
+    .qty-btn { width: 36px; height: 42px; font-size: 18px; }
+    .qty-input { width: 46px; height: 42px; font-size: 14px; }
+
+    .extra-fields { flex-direction: row; align-items: start; }
+    .extra-fields .field-group:first-child { flex: 0 0 200px; }
+    .extra-fields .field-group:last-child { flex: 1; }
+
+    .send-area { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+    .send-row-main { flex: 1; }
+    .btn-email { background: var(--accent); color: var(--white); border: none; }
+    .btn-email:hover { background: #005fa3; }
+    .btn-copy:hover { background: #333; }
+    .btn-reset { align-self: stretch; height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-block">
+      <span class="logo-name">АЛИОЛХИМ</span>
+      <span class="logo-tagline">Основа совершенства</span>
+    </div>
+    <div class="header-title">
+      <h1>Форма заявки</h1>
+      <p>Оптовый прайс от 30.03.2026</p>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section-tabs">
+    <button class="tab-btn active" onclick="switchTab('moushie', this)" type="button">Моющие средства</button>
+    <button class="tab-btn" onclick="switchTab('dezy', this)" type="button">
+      Дезинфицирующие
+      <span class="count-badge" id="badge-dezy">0</span>
+    </button>
+  </div>
+
+  <div class="section active" id="section-moushie">
+    <div class="section-label">BASE SYSTEM — Профессиональные составы для пищевой промышленности</div>
+    <div class="product-grid" id="grid-base"></div>
+    <div class="section-label">HELPER SYSTEM — Вспомогательные и сервисные средства</div>
+    <div class="product-grid" id="grid-helper"></div>
+  </div>
+
+  <div class="section" id="section-dezy">
+    <div class="section-label">DEZAR SYSTEM — Дезинфицирующие средства</div>
+    <div class="product-grid" id="grid-dezy"></div>
+  </div>
+
+  <div class="extra-fields">
+    <div class="field-group">
+      <label>Желаемая дата поставки</label>
+      <input type="date" id="delivery-date" />
+    </div>
+    <div class="field-group">
+      <label>Комментарий к заявке</label>
+      <textarea id="comment" rows="3" placeholder="Особые условия, адрес доставки, контактное лицо..."></textarea>
+    </div>
+  </div>
+
+  <div class="basket-preview">
+    <div class="basket-title">
+      Выбранные позиции
+      <span class="count-badge visible" id="total-badge" style="background:#333">0</span>
+    </div>
+    <div id="basket-content">
+      <div class="basket-empty">Ни одной позиции не выбрано</div>
+    </div>
+  </div>
+
+  <div class="send-area">
+    <div class="send-row-main">
+      <button class="btn-send btn-copy" onclick="copyText()" type="button">⎘ Скопировать заявку</button>
+      <button class="btn-send btn-email" onclick="sendEmail()" type="button">✉ Открыть почту</button>
+    </div>
+    <button class="btn-send btn-reset" onclick="resetAll()" type="button" title="Сбросить всё">✕</button>
+  </div>
+  <div class="notice">
+    <strong>Скопировать заявку</strong> — вставьте в любую почту или мессенджер.<br>
+    <strong>Открыть почту</strong> — работает если на устройстве настроено приложение Почта.
+  </div>
+
+</div>
+
+<div class="contacts-bar">
+  ООО «АЛИОЛХИМ» &nbsp;·&nbsp; г. Ставрополь, Старомарьевское шоссе, д. 9В<br>
+  <a href="tel:+79054416680">+7 (905) 441-66-80</a> &nbsp;·&nbsp;
+  <a href="mailto:op@aliolchem.ru">op@aliolchem.ru</a> &nbsp;·&nbsp;
+  <a href="https://aliolchem.ru" target="_blank">aliolchem.ru</a>
+</div>
+
+<div class="toast" id="toast">✓ Текст заявки скопирован</div>
+
+<script>
+var products = {
+  base: [
+    { id: 'base_a1',  name: 'BASE A1',   desc: 'Кислотное беспенное средство для CIP систем',              volumes: ['5л','10л','20л'] },
+    { id: 'base_a2',  name: 'BASE A2',   desc: 'Кислотное пенное средство',                                 volumes: ['1л','5л','10л','20л'] },
+    { id: 'base_pp',  name: 'BASE PP',   desc: 'Дезинфицирующее средство на основе надуксусной кислоты',    volumes: ['1л','5л','10л','20л'] },
+    { id: 'base_s1',  name: 'BASE S1',   desc: 'Щелочное беспенное средство для CIP систем',                volumes: ['5л','10л','20л'] },
+    { id: 'base_s1p', name: 'BASE S1Р',  desc: 'Щелочное беспенное средство для CIP мойки',                 volumes: ['5л','10л','20л'] },
+    { id: 'base_s2',  name: 'BASE S2',   desc: 'Щелочное пенное средство на основе ЧАС',                    volumes: ['1л','5л','10л','20л'] },
+    { id: 'base_s3',  name: 'BASE S3',   desc: 'Щелочное пенное средство на основе хлора',                  volumes: ['1л','5л','10л','20л'] },
+    { id: 'base_s4',  name: 'BASE S4',   desc: 'Щелочное пенное средство для коптильного оборудования',     volumes: ['1л','5л','10л','20л'] }
+  ],
+  helper: [
+    { id: 'helper_hw',        name: 'HELPER HW',        desc: 'Нейтральное средство для мытья посуды',        volumes: ['0,5л','1л','5л','10л','20л'] },
+    { id: 'helper_inside_dw', name: 'HELPER INSIDE DW', desc: 'Средство для посудомоечных машин',             volumes: ['5л','10л'] },
+    { id: 'helper_rinser_dw', name: 'HELPER RINSER DW', desc: 'Ополаскиватель для посудомоечных машин',       volumes: ['5л','10л'] },
+    { id: 'helper_fc',        name: 'HELPER FC',        desc: 'Средство для ручной мойки поверхностей',       volumes: ['1л','5л','10л','20л'] },
+    { id: 'helper_side_fcm',  name: 'HELPER SIDE FCM',  desc: 'Средство для поломоечных машин',               volumes: ['1л','5л','10л','20л'] },
+    { id: 'helper_l',         name: 'HELPER L',         desc: 'Средство для отбеливания белья',               volumes: ['1л','5л','10л'] },
+    { id: 'helper_ls',        name: 'HELPER LS',        desc: 'Жидкое мыло для рук',                         volumes: ['0,5л','1л','5л','10л','20л'] },
+    { id: 'helper_ww',        name: 'HELPER WW',        desc: 'Средство для очистки стекла и зеркал',        volumes: ['0,5л','1л','5л','10л'] },
+    { id: 'helper_cb',        name: 'HELPER CB',        desc: 'Смазывающая жидкость для конвейерных лент',    volumes: ['5л','10л','20л'] }
+  ],
+  dezy: [
+    { id: 'dezarekshlor',   name: 'Дезарексхлор',   desc: 'Дезинфекция поверхностей и оборудования, хлорактивное',         volumes: ['1л','5л','10л','20л'] },
+    { id: 'dezarisept',     name: 'Дезарисепт',     desc: 'Антисептик для рук на основе изопропилового спирта',            volumes: ['20мл','30мл','50мл','0,5л','1л','5л','10л','20л'] },
+    { id: 'dezariserf',     name: 'Дезарисерф',     desc: 'Дезинфекция поверхностей, ЧАС + триамин',                       volumes: ['1л','5л','10л','20л'] },
+    { id: 'dezariksin',     name: 'Дезариксин',     desc: 'Дезинфекция поверхностей и ИМН в ЛПУ',                          volumes: ['1л','5л','10л','20л'] },
+    { id: 'dezarimax',      name: 'Дезаримакс',     desc: 'Дезинфекция поверхностей, ЧАС, в т.ч. фармпредприятия',         volumes: ['1л','5л','10л','20л'] },
+    { id: 'dezarekt_forte', name: 'Дезарект-Форте', desc: 'Дезинфекция поверхностей и ИМН, ЧАС + гуанидин',                volumes: ['1л','5л','10л','20л'] }
+  ]
+};
+
+var state = {};
+
+function renderGrid(containerId, items) {
+  var grid = document.getElementById(containerId);
+  if (!grid) return;
+  var html = '';
+  for (var i = 0; i < items.length; i++) {
+    var p = items[i];
+    var maxVol = p.volumes[p.volumes.length - 1];
+    var opts = '';
+    for (var j = 0; j < p.volumes.length; j++) {
+      var v = p.volumes[j];
+      opts += '<option value="' + v + '"' + (v === maxVol ? ' selected' : '') + '>' + v + '</option>';
+    }
+    html +=
+      '<div class="product-row" id="row-' + p.id + '">' +
+        '<div class="product-info">' +
+          '<div class="product-name">' + p.name + '</div>' +
+          '<div class="product-desc">' + p.desc + '</div>' +
+        '</div>' +
+        '<div class="product-controls">' +
+          '<select class="volume-select" id="vol-' + p.id + '" onchange="updateState(\'' + p.id + '\')">' + opts + '</select>' +
+          '<div class="qty-control">' +
+            '<button class="qty-btn" onclick="changeQty(\'' + p.id + '\',-1)" type="button">−</button>' +
+            '<input class="qty-input" type="number" id="qty-' + p.id + '" value="0" min="0" ' +
+              'onchange="updateState(\'' + p.id + '\')" oninput="updateState(\'' + p.id + '\')">' +
+            '<button class="qty-btn" onclick="changeQty(\'' + p.id + '\',1)" type="button">+</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  grid.innerHTML = html;
+}
+
+renderGrid('grid-base',   products.base);
+renderGrid('grid-helper', products.helper);
+renderGrid('grid-dezy',   products.dezy);
+
+function changeQty(id, delta) {
+  var input = document.getElementById('qty-' + id);
+  var next = Math.max(0, (parseInt(input.value) || 0) + delta);
+  input.value = next;
+  updateState(id);
+}
+
+function updateState(id) {
+  var qty = parseInt(document.getElementById('qty-' + id).value) || 0;
+  var vol = document.getElementById('vol-' + id).value;
+  var row = document.getElementById('row-' + id);
+  if (qty > 0) {
+    state[id] = { qty: qty, volume: vol };
+    row.classList.add('has-value');
+  } else {
+    delete state[id];
+    row.classList.remove('has-value');
+  }
+  renderBasket();
+  updateBadges();
+}
+
+function allProducts() {
+  return products.base.concat(products.helper, products.dezy);
+}
+
+function findProduct(id) {
+  var all = allProducts();
+  for (var i = 0; i < all.length; i++) { if (all[i].id === id) return all[i]; }
+  return null;
+}
+
+function renderBasket() {
+  var content = document.getElementById('basket-content');
+  var keys = Object.keys(state);
+  if (keys.length === 0) {
+    content.innerHTML = '<div class="basket-empty">Ни одной позиции не выбрано</div>';
+    return;
+  }
+  var html = '<div class="basket-items">';
+  for (var i = 0; i < keys.length; i++) {
+    var id = keys[i];
+    var s = state[id];
+    var p = findProduct(id);
+    html += '<div class="basket-item">' +
+      '<span><span class="basket-item-name">' + p.name + '</span>' +
+      '<span class="basket-item-detail"> · ' + s.volume + '</span></span>' +
+      '<span class="basket-item-qty">' + s.qty + ' шт.</span>' +
+      '</div>';
+  }
+  html += '</div>';
+  content.innerHTML = html;
+}
+
+function updateBadges() {
+  var total = Object.keys(state).length;
+  document.getElementById('total-badge').textContent = total;
+  var dezyCount = 0;
+  for (var i = 0; i < products.dezy.length; i++) { if (state[products.dezy[i].id]) dezyCount++; }
+  var badge = document.getElementById('badge-dezy');
+  badge.textContent = dezyCount;
+  badge.className = 'count-badge' + (dezyCount > 0 ? ' visible' : '');
+}
+
+function buildOrderText() {
+  var keys = Object.keys(state);
+  if (keys.length === 0) return null;
+  var date = document.getElementById('delivery-date').value;
+  var comment = document.getElementById('comment').value.trim();
+  var lines = ['ЗАЯВКА НА ПОСТАВКУ ПРОДУКЦИИ', '================================', '',
+    'Поставщик: ООО «АЛИОЛХИМ»', 'Email: op@aliolchem.ru', '', 'СОСТАВ ЗАЯВКИ:', ''];
+  for (var i = 0; i < keys.length; i++) {
+    var id = keys[i];
+    var s = state[id];
+    var p = findProduct(id);
+    lines.push((i + 1) + '. ' + p.name + ' — ' + s.volume + ' — ' + s.qty + ' шт.');
+  }
+  lines.push('');
+  if (date) {
+    var d = new Date(date);
+    lines.push('Желаемая дата поставки: ' + d.toLocaleDateString('ru-RU', {day:'2-digit',month:'2-digit',year:'numeric'}));
+  }
+  if (comment) lines.push('Комментарий: ' + comment);
+  lines.push(''); lines.push('================================');
+  return lines.join('\n');
+}
+
+function sendEmail() {
+  var text = buildOrderText();
+  if (!text) { alert('Выберите хотя бы одну позицию.'); return; }
+  var subject = encodeURIComponent('Заявка на поставку продукции АЛИОЛХИМ');
+  var body = encodeURIComponent(text);
+  window.location.href = 'mailto:op@aliolchem.ru?subject=' + subject + '&body=' + body;
+}
+
+function copyText() {
+  var text = buildOrderText();
+  if (!text) { alert('Выберите хотя бы одну позицию.'); return; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showToast).catch(function() { fallbackCopy(text); });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); showToast(); }
+  catch(e) { alert('Скопируйте текст вручную:\n\n' + text); }
+  document.body.removeChild(ta);
+}
+
+function showToast() {
+  var t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2800);
+}
+
+function resetAll() {
+  if (!confirm('Сбросить все выбранные позиции?')) return;
+  var all = allProducts();
+  for (var i = 0; i < all.length; i++) {
+    var p = all[i];
+    delete state[p.id];
+    var q = document.getElementById('qty-' + p.id);
+    if (q) q.value = 0;
+    var r = document.getElementById('row-' + p.id);
+    if (r) r.classList.remove('has-value');
+  }
+  document.getElementById('delivery-date').value = '';
+  document.getElementById('comment').value = '';
+  renderBasket(); updateBadges();
+}
+
+function switchTab(section, btn) {
+  var btns = document.querySelectorAll('.tab-btn');
+  var secs = document.querySelectorAll('.section');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  for (var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  btn.classList.add('active');
+  document.getElementById('section-' + section).classList.add('active');
+}
+
+renderBasket();
+updateBadges();
+</script>
+</body>
+</html>
