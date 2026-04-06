@@ -373,6 +373,17 @@
 
   .contacts-bar a { color: var(--accent); text-decoration: none; }
 
+  /* CLIENT FIELDS */
+  .client-fields {
+    background: var(--white);
+    padding: 16px 12px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-left: 3px solid var(--accent);
+  }
+
   /* ДЕСКТОП */
   @media (min-width: 640px) {
     .main { padding: 28px 24px 60px; }
@@ -387,6 +398,9 @@
     .qty-control { height: 42px; }
     .qty-btn { width: 36px; height: 42px; font-size: 18px; }
     .qty-input { width: 46px; height: 42px; font-size: 14px; }
+
+    .client-fields { flex-direction: row; gap: 16px; }
+    .client-fields .field-group { flex: 1; }
 
     .extra-fields { flex-direction: row; align-items: start; }
     .extra-fields .field-group:first-child { flex: 0 0 200px; }
@@ -417,6 +431,17 @@
 </div>
 
 <div class="main">
+
+  <div class="client-fields">
+    <div class="field-group">
+      <label>Название компании <span style="color:#cc3300">*</span></label>
+      <input type="text" id="client-company" placeholder="ООО Ромашка" />
+    </div>
+    <div class="field-group">
+      <label>Контактное лицо</label>
+      <input type="text" id="client-contact" placeholder="Иванов Иван" />
+    </div>
+  </div>
 
   <div class="section-tabs">
     <button class="tab-btn active" onclick="switchTab('moushie', this)" type="button">Моющие средства</button>
@@ -620,10 +645,19 @@ function updateBadges() {
 function buildOrderText() {
   var keys = Object.keys(state);
   if (keys.length === 0) return null;
+  var company = document.getElementById('client-company').value.trim();
+  var contact = document.getElementById('client-contact').value.trim();
   var date = document.getElementById('delivery-date').value;
   var comment = document.getElementById('comment').value.trim();
-  var lines = ['ЗАЯВКА НА ПОСТАВКУ ПРОДУКЦИИ', '================================', '',
-    'Поставщик: ООО «АЛИОЛХИМ»', 'Email: op@aliolchem.ru', '', 'СОСТАВ ЗАЯВКИ:', ''];
+  var lines = ['ЗАЯВКА НА ПОСТАВКУ ПРОДУКЦИИ', '================================', ''];
+  if (company) lines.push('Заказчик: ' + company);
+  if (contact) lines.push('Контактное лицо: ' + contact);
+  lines.push('');
+  lines.push('Поставщик: ООО «АЛИОЛХИМ»');
+  lines.push('Email: op@aliolchem.ru');
+  lines.push('');
+  lines.push('СОСТАВ ЗАЯВКИ:');
+  lines.push('');
   for (var i = 0; i < keys.length; i++) {
     var id = keys[i];
     var s = state[id];
@@ -641,6 +675,8 @@ function buildOrderText() {
 }
 
 function sendEmail() {
+  var company = document.getElementById('client-company').value.trim();
+  if (!company) { alert('Пожалуйста, укажите название компании.'); document.getElementById('client-company').focus(); return; }
   var text = buildOrderText();
   if (!text) { alert('Выберите хотя бы одну позицию.'); return; }
   var subject = encodeURIComponent('Заявка на поставку продукции АЛИОЛХИМ');
@@ -649,6 +685,8 @@ function sendEmail() {
 }
 
 function copyText() {
+  var company = document.getElementById('client-company').value.trim();
+  if (!company) { alert('Пожалуйста, укажите название компании.'); document.getElementById('client-company').focus(); return; }
   var text = buildOrderText();
   if (!text) { alert('Выберите хотя бы одну позицию.'); return; }
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -686,6 +724,8 @@ function resetAll() {
     var r = document.getElementById('row-' + p.id);
     if (r) r.classList.remove('has-value');
   }
+  document.getElementById('client-company').value = '';
+  document.getElementById('client-contact').value = '';
   document.getElementById('delivery-date').value = '';
   document.getElementById('comment').value = '';
   renderBasket(); updateBadges();
